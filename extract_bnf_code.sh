@@ -15,8 +15,20 @@ fi
 
 
 # Check the bnf code list
+if [ ! -f "bnf_codes.txt" ];then
+    echo "File bnf_codes.txt does not exist. Please create it with the BNF codes you want to search for."
+    exit 1
+fi
+
 BNF_CODE_LIST=$(cat bnf_codes.txt)
+if [ $(echo "$BNF_CODE_LIST" | wc -l) -lt 1 ];then
+    echo "bnf_codes.txt is empty. Please add BNF codes to it."
+    exit 1
+fi
+
 BNF_PATTERN=$(echo "$BNF_CODE_LIST" | xargs | sed -E 's/ /|/g')
+
+
 echo -e "\nDetected $(echo "$BNF_CODE_LIST" | wc -l) BNF codes in bnf_codes.txt\n"
 
 for fname in "$@"; do
